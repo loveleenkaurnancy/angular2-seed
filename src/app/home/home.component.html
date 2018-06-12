@@ -1,14 +1,17 @@
 <div class="container">
     <h3>Employee Form</h3>
     <form #form="ngForm" novalidate>
-        <div class="form-group">
-            <label>First Name</label>
-            <input #firstName required type="text" class="form-control" required placeholder="Name" name="firstName"
+        <div class="form-group" [class.has-error]="firstName.invalid && firstName.touched">
+            <label class="control-label">First Name</label>
+            <input #firstName="ngModel" maxlength="3" required type="text" class="form-control" required placeholder="Name" name="firstName"
                 [(ngModel)]="model.firstName">
+                <div *ngIf="firstName.invalid && firstName.dirty" class="alert alert-danger">
+                    First Name is required
+
+                </div>
         </div>
 
-        <h3>Classes</h3>
-        <h4>{{ firstName.className }}</h4>
+
 
         <!-- <div class="form-group">
             <label>Last Name</label>
@@ -37,29 +40,31 @@
                 <input type="radio" name="pay-type" value="1099"
                 [(ngModel)]="model.paymentType"> 1099
             </label>
-        </div>
+        </div> 
 
-        <div class="form-group">
-            <label>Primary Language</label>
-            <select class="form-group"
-                name="primaryLanguage"
-                [(ngModel)]="model.primaryLanguage">
+        <div class="form-group" [class.has-error]="hasPrimaryLanguageError">
+            <label class="control-label">Primary Language</label>
+            <select class="form-control" #primaryLanguage
+                (blur)="validatePrimaryLanguage(primaryLanguage.value)"
+                (change)="validatePrimaryLanguage(primaryLanguage.value)"
+                name="primaryLanguage" [(ngModel)]="model.primaryLanguage">
+                <option value="default">Select a language...</option>
                 <option *ngFor="let lang of languages">
                     {{ lang }}
                 </option>
             </select>
-        </div> -->
+        </div>
 <!--
         <div class="form-group">
             <label>date</label>
             <input type="date" class="form-control">
         </div> -->
 
-        <button class="btn btn-primary" type="submit">OK</button>
+        <button class="btn btn-primary" type="submit" [disabled]="form.invalid">OK</button>
+<!-- 
+        {{ form.valid }} -->
     </form>
-    Model : {{ model|json }}
-    <br>
-    Angular : {{ form.value | json }}
+
 </div>
 
 <!-- {{ form.pristine }} -->
